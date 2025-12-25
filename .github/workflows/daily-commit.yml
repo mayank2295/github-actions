@@ -2,36 +2,36 @@ name: Daily Automated Commit
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs every day at midnight UTC
-  workflow_dispatch:      # Allows you to run this manually from the Actions tab for testing
+    - cron: '0 0 * * *'   # Runs daily at midnight UTC
+  workflow_dispatch:
 
 jobs:
   commit-job:
     runs-on: ubuntu-latest
     permissions:
-      contents: write     # REQUIRED: allows the action to push changes
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Make a change
         run: |
-          # Appends the current date to a file named 'activity-log.txt'
-          echo "Run on $(date)" >> activity-log.txt
+          echo "Run on $(date -u)" >> activity-log.txt
 
-      - name: Configure Git
+      - name: Configure Git (use your identity)
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "mayank2295"
+          git config user.email "mayankgupta23081@gmail.com"
 
       - name: Commit and Push
         run: |
           git add activity-log.txt
-          # Only commit if there are changes (prevents errors if run twice)
-          if [[ -n $(git status -s) ]]; then
-            git commit -m "Daily automated commit [skip ci]"
-            git push
+          if [[ -n $(git status --porcelain) ]]; then
+            git commit -m "Daily activity update"
+            git push origin HEAD
           else
             echo "No changes to commit"
           fi
