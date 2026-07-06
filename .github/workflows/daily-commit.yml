@@ -23,8 +23,8 @@ jobs:
 
       - name: Configure Git (use your identity)
         run: |
-          git config user.name "mayank2295"
-          git config user.email "mayankgupta23081@gmail.com"
+          git config user.name ""
+          git config user.email ""
 
       - name: Commit and Push
         run: |
